@@ -1,0 +1,21 @@
+ul.pagination {
+  flex-wrap: wrap;
+  padding: 0;
+  margin-bottom: 25px;
+  border-radius: 5px;
+  overflow: hidden;
+  text-align: center;
+  width: 100%;
+}
+
+.page-link, .page-link:hover {
+  color: #fff;
+  background-color: #008966;
+  border-color: #007c5d;
+  padding: 5px 61px;
+  cursor: initial;
+}
+
+.active, .active:hover {
+  background-color: #00bc8c;
+}

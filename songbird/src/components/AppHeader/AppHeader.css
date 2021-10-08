@@ -1,0 +1,11 @@
+.top-panel {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score {
+  margin-bottom: 0;
+  font-size: 20px;
+}

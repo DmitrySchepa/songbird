@@ -1,22 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './ProgressBar.css';
 
-export default class ProgressBar extends Component {
+const ProgressBar = ({ level }) => {
 
-	render() {
+	const levels = ['Warm-up', 'Sparrows', 'Forest birds', 'Songbirds', 'Seabirds', 'Raptors'];
+	const birds = levels.map((el, ind) => (
+		<li className='page-item' key={el}>
+			<a className={level === ind ? 'page-link active' : 'page-link'} href='/#'>{el}</a>
+		</li>)
+	);
 
-		const levels = ['Warm-up', 'Sparrows', 'Forest birds', 'Songbirds', 'Seabirds', 'Raptors'];
-		const { level } = this.props;
-		const birds = levels.map((el, ind) => (
-			<li className='page-item' key={el}>
-				<a className={level === ind ? 'page-link active' : 'page-link'} href='/#'>{el}</a>
-			</li>)
-		);
-
-		return	(
-			<ul className="pagination">
-				{birds}
-			</ul>
-		)
-	}
+	return	(
+		<ul className="pagination">
+			{birds}
+		</ul>
+	)
 };
+
+export default ProgressBar;

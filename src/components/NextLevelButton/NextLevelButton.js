@@ -1,18 +1,30 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import './NextLevelButton.css';
 import clsx from 'clsx'
 
-const NextLevelButton = ({isLevelComplete, setCurrentLevel, setCurrentAnswer }) => {  
+const NextLevelButton = ({
+  isLevelComplete,
+  setCurrentLevel,
+  setCurrentAnswer,
+  setIsLevelComplete
+}) => {  
+
+  const handleClick = useCallback(() => {
+    setCurrentLevel(prevLevel => prevLevel + 1);
+    setCurrentAnswer(null);
+    setIsLevelComplete(false);
+  }, [setCurrentAnswer, setCurrentLevel, setIsLevelComplete]);
+
+  const getClassName = useCallback(
+    () => clsx('btn', isLevelComplete && 'complete'), [isLevelComplete]
+  );
 
   return (
     <button
       type='button'
-      className={clsx('btn', isLevelComplete && 'complete')}
+      className={getClassName()}
       disabled={!isLevelComplete}
-      onClick={() => {
-        setCurrentLevel();
-        setCurrentAnswer(null);
-      }}
+      onClick={handleClick}
     >
       Next Level
     </button>

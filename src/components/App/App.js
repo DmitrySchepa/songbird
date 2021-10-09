@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 
 import AppHeader from '../AppHeader';
@@ -9,99 +9,60 @@ import NextLevelButton from '../NextLevelButton';
 import FinalScreen from '../FinalScreen';
 import BirdDetails from '../BirdDetails';
 
-export default class App extends Component {
+ const App = () => {
 
-  state = {
-    score: 0,
-    isLevelComplete: false,
-    level: 0,
-    correctAnswerId: null,
-    currentAnswer: null
-  };
+  const [score, setScore ] = useState(0);
+  const [isLevelComplete, setIsLevelComplete ] = useState(false);
+  const [level, setCurrentLevel ] = useState(0);
+  const [correctAnswerId, setCorrectAnswerId ] = useState(null);
+  const [currentAnswer, setCurrentAnswer ] = useState(null);
 
-  setCurrentAnswer = (answer) => {
-    this.setState({
-      currentAnswer: answer
-    });
-  };
+  const generateCorrectAnswerId = useCallback(() => Math.floor(Math.random() * 6), []);
 
-  generateCorrectAnswerId() {
-    return Math.floor(Math.random() * 6);
-  }
+  useEffect(() => {
+    setCorrectAnswerId(generateCorrectAnswerId());
+  }, [generateCorrectAnswerId, level]);
 
-  setCorrectAnswerId() {
-    this.setState((state) => ({
-      ...state,
-      correctAnswerId: this.generateCorrectAnswerId()
-    }));
-  }
-
-  setIsLevelComplete = (points) => {
-    this.setState((state) => ({
-      ...state,
-      isLevelComplete: true,
-      score: this.state.score + points
-    }));
-  }
-
-  setCurrentLevel = () => {
-    this.setState((state) => ({
-      ...state,
-      level: this.state.level + 1,
-      isLevelComplete: false
-    }));
-  };
-
-  componentDidMount() {
-    this.setCorrectAnswerId()
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.level !== this.state.level) {
-      this.setCorrectAnswerId();
-    }
-  }
-
-  render() {
-    const { level, score, correctAnswerId, isLevelComplete, currentAnswer } = this.state;
-
-    return (
-      <div className='container'>
-        <div className='header d-flex'>
-          <AppHeader score={score}/>
-          <ProgressBar level={level}/>
-        </div>
-        {
-          level === 6 ? <FinalScreen score={score}/> : (
-            <>
-              <CurrentQuestion
-                level={level} 
-                correctAnswerId={correctAnswerId} 
-                isLevelComplete={isLevelComplete}
-              />
-              <div className="row mb2">
-                <AnswersList
-                  correctAnswerId={correctAnswerId}
-                  level={level}
-                  isLevelComplete={isLevelComplete}
-                  setCurrentAnswer={this.setCurrentAnswer}
-                  setIsLevelComplete={this.setIsLevelComplete}
-                />
-                <BirdDetails
-                  currentAnswer={currentAnswer}
-                  correctAnswerId={correctAnswerId}
-                />
-              </div>     
-              <NextLevelButton 
-                isLevelComplete={isLevelComplete}
-                setCurrentLevel={this.setCurrentLevel}
-                setCurrentAnswer={this.setCurrentAnswer}
-              />
-            </>
-          )
-        }        
-        
+  return (
+    <div className='container'>
+      <div className='header d-flex'>
+        <AppHeader score={score}/>
+        <ProgressBar level={level}/>
       </div>
-    );  
-  }
+      {
+        level === 6 ? <FinalScreen score={score}/> : (
+          <>
+            <CurrentQuestion
+              level={level} 
+              correctAnswerId={correctAnswerId} 
+              isLevelComplete={isLevelComplete}
+            />
+            <div className="row mb2">
+              <AnswersList
+                correctAnswerId={correctAnswerId}
+                level={level}
+                isLevelComplete={isLevelComplete}
+                setCurrentAnswer={setCurrentAnswer}
+                setIsLevelComplete={setIsLevelComplete}
+                setScore={setScore}
+                currentAnswer={currentAnswer}
+              />
+              <BirdDetails
+                currentAnswer={currentAnswer}
+                correctAnswerId={correctAnswerId}
+              />
+            </div>     
+            <NextLevelButton 
+              isLevelComplete={isLevelComplete}
+              setCurrentLevel={setCurrentLevel}
+              setIsLevelComplete={setIsLevelComplete}
+              setCurrentAnswer={setCurrentAnswer}
+            />
+          </>
+        )
+      }        
+    </div>
+  );  
 };
+
+export default App;

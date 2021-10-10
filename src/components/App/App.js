@@ -1,5 +1,8 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import './App.css';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectLevel } from '../../state/store';
+import { setCorrectAnswerId } from '../../state/actions';
 
 import AppHeader from '../AppHeader';
 import ProgressBar from '../ProgressBar';
@@ -11,53 +14,30 @@ import BirdDetails from '../BirdDetails';
 
  const App = () => {
 
-  const [score, setScore ] = useState(0);
-  const [isLevelComplete, setIsLevelComplete ] = useState(false);
-  const [level, setCurrentLevel ] = useState(0);
-  const [correctAnswerId, setCorrectAnswerId ] = useState(null);
-  const [currentAnswer, setCurrentAnswer ] = useState(null);
+  const level = useSelector(selectLevel);
+  const dispatch = useDispatch();
 
   const generateCorrectAnswerId = useCallback(() => Math.floor(Math.random() * 6), []);
 
   useEffect(() => {
-    setCorrectAnswerId(generateCorrectAnswerId());
-  }, [generateCorrectAnswerId, level]);
+    dispatch(setCorrectAnswerId(generateCorrectAnswerId()));
+  }, [dispatch, generateCorrectAnswerId, level]);
 
   return (
     <div className='container'>
       <div className='header d-flex'>
-        <AppHeader score={score}/>
-        <ProgressBar level={level}/>
+        <AppHeader />
+        <ProgressBar />
       </div>
       {
-        level === 6 ? <FinalScreen score={score}/> : (
+        level === 6 ? <FinalScreen/> : (
           <>
-            <CurrentQuestion
-              level={level} 
-              correctAnswerId={correctAnswerId} 
-              isLevelComplete={isLevelComplete}
-            />
+            <CurrentQuestion />
             <div className="row mb2">
-              <AnswersList
-                correctAnswerId={correctAnswerId}
-                level={level}
-                isLevelComplete={isLevelComplete}
-                setCurrentAnswer={setCurrentAnswer}
-                setIsLevelComplete={setIsLevelComplete}
-                setScore={setScore}
-                currentAnswer={currentAnswer}
-              />
-              <BirdDetails
-                currentAnswer={currentAnswer}
-                correctAnswerId={correctAnswerId}
-              />
+              <AnswersList />
+              <BirdDetails />
             </div>     
-            <NextLevelButton 
-              isLevelComplete={isLevelComplete}
-              setCurrentLevel={setCurrentLevel}
-              setIsLevelComplete={setIsLevelComplete}
-              setCurrentAnswer={setCurrentAnswer}
-            />
+            <NextLevelButton />
           </>
         )
       }        

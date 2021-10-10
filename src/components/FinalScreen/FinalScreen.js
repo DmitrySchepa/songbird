@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useCallback } from "react";
 import './FinalScreen.css';
+import { useSelector } from 'react-redux';
+import { selectScore } from '../../state/store';
 
-const FinalScreen = ({score}) => {
+const FinalScreen = () => {
 
-  const handleClick = () => window.location.reload();
+	const score = useSelector(selectScore);
+  const handleClick = useCallback(() => window.location.reload(), []);
+  
   return (
     <div>
       <h1 className='display-3 text-center'>Congratulations!</h1>

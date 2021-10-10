@@ -1,19 +1,25 @@
 import React, { useCallback } from 'react';
 import './NextLevelButton.css';
-import clsx from 'clsx'
-
-const NextLevelButton = ({
-  isLevelComplete,
-  setCurrentLevel,
+import clsx from 'clsx';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectIsLevelComplete, selectLevel } from '../../state/store';
+import { 
+  setLevel,
   setCurrentAnswer,
-  setIsLevelComplete
-}) => {  
+  setIsLevelComplete 
+} from '../../state/actions';
+
+const NextLevelButton = () => {  
+
+  const isLevelComplete = useSelector(selectIsLevelComplete);
+  const dispatch = useDispatch();
+  const level = useSelector(selectLevel);
 
   const handleClick = useCallback(() => {
-    setCurrentLevel(prevLevel => prevLevel + 1);
-    setCurrentAnswer(null);
-    setIsLevelComplete(false);
-  }, [setCurrentAnswer, setCurrentLevel, setIsLevelComplete]);
+    dispatch(setLevel(level + 1));
+    dispatch(setCurrentAnswer(null));
+    dispatch(setIsLevelComplete(false));
+  }, [dispatch, level]);
 
   const getClassName = useCallback(
     () => clsx('btn', isLevelComplete && 'complete'), [isLevelComplete]

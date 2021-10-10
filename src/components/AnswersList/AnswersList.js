@@ -1,12 +1,20 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import './AnswersList.css';
 import birdsData from '../../data/birdsData';
-import clsx from 'clsx'
+import clsx from 'clsx';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectLevel, selectCorrectAnswerId, selectIsLevelComplete, selectScore } from '../../state/store';
+import { setScore, setCurrentAnswer, setIsLevelComplete } from '../../state/actions';
 
-const AnswersList = ({
-  level, setCurrentAnswer, correctAnswerId, setIsLevelComplete, isLevelComplete, setScore
-}) => {
+const AnswersList = () => {
+
+  const dispatch = useDispatch();
   const [chosenAnswers, setChosenAnswer ] = useState([]);
+  const level = useSelector(selectLevel);
+  const correctAnswerId = useSelector(selectCorrectAnswerId);
+  const isLevelComplete = useSelector(selectIsLevelComplete);
+  const score = useSelector(selectScore);
+
 
   const chooseAnswer = useCallback((ind, isCorrect) => 
     isLevelComplete ? setChosenAnswer([]) : 
@@ -25,15 +33,15 @@ const AnswersList = ({
   }, [level]);
 
   const handleClick = useCallback((el, ind) => {
-    setCurrentAnswer(el);
+    dispatch(setCurrentAnswer(el));
     chooseAnswer(ind, false);
     if (correctAnswerId === ind) {
       const points = 5 - chosenAnswers.length; 
-      setIsLevelComplete(true);
-      setScore(prevScore => prevScore + points);
+      dispatch(setIsLevelComplete(true));
+      dispatch(setScore(score + points));
       chooseAnswer(ind, true);
     }
-  }, [chooseAnswer, chosenAnswers.length, correctAnswerId, setCurrentAnswer, setIsLevelComplete, setScore]);
+  }, [chooseAnswer, chosenAnswers.length, correctAnswerId, dispatch, score]);
 
   const birds = useMemo(() => birdsData[level].map((el, ind) => (        
     <li

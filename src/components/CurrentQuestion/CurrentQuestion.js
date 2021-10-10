@@ -2,8 +2,15 @@ import React from 'react';
 import bird from './bird.jpg';
 import './CurrentQuestion.css';
 import birdsData from '../../data/birdsData';
+import { useSelector } from 'react-redux';
+import { selectLevel, selectCorrectAnswerId, selectIsLevelComplete } from '../../state/store';
 
-const CurrentQuestion = ({ level, correctAnswerId, isLevelComplete }) => {
+
+const CurrentQuestion = () => {
+
+	const level = useSelector(selectLevel);
+  const correctAnswerId = useSelector(selectCorrectAnswerId);
+  const isLevelComplete = useSelector(selectIsLevelComplete);
 
   const correctAnswer = birdsData[level][correctAnswerId];
   const audio = correctAnswer?.audio;
